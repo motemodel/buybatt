@@ -2,17 +2,26 @@
 <p>โทร 099-424-8896</p>
 <p><a href="https://lin.ee/qDGlbJZ"><img src="https://scdn.line-apps.com/n/line_add_friends/btn/th.png" alt="เพิ่มเพื่อน" height="36" border="0"></a></p><br>
 <h1>Catalog</h1>
-<ul id="serverFiles"></ul>
+<ul id="file-list"></ul>
 
-<script>
-  fetch('/')
-    .then(response => response.json())
-    .then(files => {
-      const list = document.getElementById('serverFiles');
-      files.forEach(file => {
-        const li = document.createElement('li');
-        li.textContent = file;
-        list.appendChild(li);
+  <script>
+    // Fetch the raw HTML of the folder (must end with a trailing slash)
+    fetch('/')
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const links = Array.from(doc.querySelectorAll('a'));
+        const list = document.getElementById('file-list');
+
+        links.forEach(link => {
+          const href = link.getAttribute('href');
+          // Filter out parent directory links and sorting query strings
+          if (href && !href.startsWith('?') && !href.startsWith('/')) {
+            const li = document.createElement('li');
+            li.textContent = decodeURIComponent(href);
+            list.appendChild(li);
+          }
+        });
       });
-    });
-</script>
+  </script>
