@@ -1,21 +1,17 @@
 <h1>buybatt</h1>
 <p>โทร 099-424-8896</p>
 <p><a href="https://lin.ee/qDGlbJZ"><img src="https://scdn.line-apps.com/n/line_add_friends/btn/th.png" alt="เพิ่มเพื่อน" height="36" border="0"></a></p><br>
-<input type="file" id="folderInput" webkitdirectory directory multiple />
-<ul id="fileList"></ul>
+<ul id="serverFiles"></ul>
 
 <script>
-  document.getElementById('folderInput').addEventListener('change', (event) => {
-    const list = document.getElementById('fileList');
-    list.innerHTML = ''; // Clear previous list
-
-    const files = event.target.files;
-    for (const file of files) {
-      const li = document.createElement('li');
-      // Use file.name for just the name, or file.webkitRelativePath for subfolder paths
-      li.textContent = file.webkitRelativePath;
-      list.appendChild(li);
-    }
-  });
+  fetch('/api/files')
+    .then(response => response.json())
+    .then(files => {
+      const list = document.getElementById('serverFiles');
+      files.forEach(file => {
+        const li = document.createElement('li');
+        li.textContent = file;
+        list.appendChild(li);
+      });
+    });
 </script>
-
