@@ -4,7 +4,7 @@
 <ul id="serverFiles"></ul>
 
 <script>
-  fetch('/api/files')
+  fetch('/')
     .then(response => response.json())
     .then(files => {
       const list = document.getElementById('serverFiles');
